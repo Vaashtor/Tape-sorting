@@ -1,0 +1,7 @@
+time in ms
+Memory in bytes
+
+read_write_Delay = 100
+move_Delay = 200
+rewind_Delay = 400
+RAM = 16
