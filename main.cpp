@@ -424,6 +424,7 @@ chrono::milliseconds Tape::rewindDelay = chrono::milliseconds(0);
 
 int main() 
 {
+    setlocale(LC_ALL, "Russian");
     // создаем папку tmp в директории программы, если её еще нет
     fs::path tempDir = fs::current_path() / "tmp";
     if (!fs::exists(tempDir)) 
