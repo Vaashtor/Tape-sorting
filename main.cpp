@@ -39,7 +39,7 @@ unsigned int count_lines(string FileName)
     ifstream file(FileName);
     if (!file.is_open()) 
     {
-        cout << "Ошибка открытия файла " << FileName << endl;
+        cout << "Error opening file " << FileName << endl;
         return 0;
     }
     string line;
@@ -63,7 +63,7 @@ unsigned int read_value_n(string FileName, unsigned int n)
     ifstream file(FileName);
     if (!file.is_open()) 
     {
-        cout << "Ошибка открытия файла " << FileName << endl;
+        cout << "Error opening file " << FileName << endl;
         return 0;
     }
     unsigned int value;
@@ -84,12 +84,12 @@ void modify_value_n(string FileName, unsigned int n, unsigned int new_Value, uns
     ofstream outputFile(FileName + ".tmp");
     if (!inputFile.is_open()) 
     {
-        cout << "Ошибка открытия файла " << FileName << endl;
+        cout << "Error opening file " << FileName << endl;
         return;
     }
     if (!outputFile.is_open()) 
     {
-        cout << "Ошибка открытия файла " << FileName + ".tmp" << endl;
+        cout << "Error opening file " << FileName + ".tmp" << endl;
         return;
     }
     string line;
@@ -156,7 +156,7 @@ class Tape: public TapeInterface
             else
             {
                 position = size - 1;
-                cout << "Лента размером " << size << " на конечной позиции" << endl;
+                cout << "Tape size " << size << " at the end" << endl;
             }
         }
         void move_backward() override
@@ -169,7 +169,7 @@ class Tape: public TapeInterface
             else
             {
                 position = 0;
-                cout << "Лента размером " << size << " на начальной позиции" << endl;
+                cout << "Tape size " << size << " at the beginning" << endl;
             }
         }
         void engage(string location) override
@@ -424,7 +424,6 @@ chrono::milliseconds Tape::rewindDelay = chrono::milliseconds(0);
 
 int main() 
 {
-    setlocale(LC_ALL, "Russian");
     // создаем папку tmp в директории программы, если её еще нет
     fs::path tempDir = fs::current_path() / "tmp";
     if (!fs::exists(tempDir)) 
@@ -439,7 +438,7 @@ int main()
     ifstream config("config.txt");
     if (!config.is_open()) 
     {
-        cout << "Ошибка открытия файла config.txt" << endl;
+        cout << "Error opening config.txt" << endl;
         return 1;
     }
 
@@ -474,12 +473,60 @@ int main()
     // считываем имена входного и выходного файлов
     Tape InputTape, OutputTape;
     string inputFileName, outputFileName;
-    cout << "Введите имя файла входной ленты:"; cin >> inputFileName;
+    
+    // /* основная программа, сортировка
+    cout << "Name of input tape file:"; cin >> inputFileName;
     InputTape.engage(inputFileName); 
-    cout << "Введите имя файла выходной ленты:"; cin >> outputFileName;
+
+    cout << "Name of input tape file:"; cin >> outputFileName;
     OutputTape.engage(outputFileName); 
     
     merge_sort_tape(InputTape, OutputTape, RAM, 0, InputTape.get_size() - 1, true);
+    // */
+
+
+    /* тестирование работы ленты
+    cout << "Введите имя файла ленты для тестирования работы интерфейса:"; cin >> inputFileName;
+    InputTape.engage(inputFileName); 
+    cout << "1 - шаг вперед, 2 - шаг назад, 3 - перемотка в начало, 4 - чтение, 5 - запись, 0 - выход из программы" << endl;
+    int x = 0, y;
+    while (true)
+    {
+        cout << "Выберите действие:"; cin >> x;
+        if (x == 0) break;
+        if (x == 1) 
+        {
+            cout << "Двигаю ленту вперед" << endl;
+            InputTape.move_forward();
+            cout << "Движение закончилось" << endl;
+        }
+        if (x == 2)
+        {
+            cout << "Двигаю ленту назад" << endl;
+            InputTape.move_backward();
+            cout << "Движение закончилось" << endl;
+        }
+        if (x == 3)
+        {
+            cout << "Перемотка в начало" << endl;
+            InputTape.rewind();
+            cout << "Перемотка закончилась" << endl;
+        }
+        if (x == 4)
+        {
+            cout << "Чтение" << endl;
+            y = InputTape.read();
+            cout << "Элемент: " << y << endl;
+        }
+        if (x == 5)
+        {
+            cout << "Введите значение: "; cin >> y;
+            InputTape.write(y);
+            cout << "Значение записано" << endl;
+        }
+        cout << endl;
+    } 
+    // */
     
     return 0;
 }
